@@ -1,68 +1,113 @@
+import java.util.ArrayList;
 import java.util.Scanner;
 import java.text.NumberFormat;
 
+/**
+ * Author: John Kneisler
+ * Date: 9/16/2019
+ * --------
+ * First part of the program:
+ * Create a book class to hold the following information
+ *      Title -- String
+ *      Author -- String
+ *      Price -- double
+ *      Description -- String
+ *      isInStock -- boolean
+ * Also create a method to print out the information of the book.
+ * --------
+ * Second part of the program:
+ * Entering and printing multiple books
+ * Enter 5 books.  After the fifth book is entered, the program will output the books in the
+ * order that they were entered.
+ */
+
 public class Book {
+
     public static void main(String[] args) {
         Scanner key = new Scanner(System.in);
+        String title;
+        String author;
+        String description;
         String priceTmp;
+        double price;
         String inStock;
+        boolean isInStock;
+        int booksToEnter = 5;
+        String displayAll;
 
-        Book book = new Book();
-        System.out.println("Enter the title of the book.");
-        book.title = key.nextLine();
+        ArrayList<Book> Books = new ArrayList<>(booksToEnter);      // used to hold multiple books (for 2nd part)
 
-        System.out.println("Enter the author of the book.");
-        book.author = key.nextLine();
+        for ( int i = 0; i < booksToEnter; i++) {
 
-        System.out.println("Enter the price of the book.");
-        priceTmp = key.nextLine();
-        book.price = Double.parseDouble(priceTmp);
+            System.out.println("Enter the title of the book.");     // Enter the title
+            title = key.nextLine();
 
-        System.out.println("Enter a desctiption of the book.");
-        book.description = key.nextLine();
+            System.out.println("Enter the author of the book.");    // Enter the author
+            author = key.nextLine();
 
-        System.out.println("Enter whether the book is in stock (\"Y\"|\"N\").");
-        inStock = key.nextLine();
-        if ( inStock.equalsIgnoreCase("Y")) {
-            book.isInStock = true;
+            System.out.println("Enter the price of the book.");     // Enter the price of the book
+            priceTmp = key.nextLine();
+            price = Double.parseDouble(priceTmp);
+
+            System.out.println("Enter a desctiption of the book."); // Enter the description of the book
+            description = key.nextLine();
+
+            System.out.println("Enter whether the book is in stock (\"Y\"|\"N\").");    // in stock?
+            inStock = key.nextLine();
+            if (inStock.equalsIgnoreCase("Y")) {
+                isInStock = true;
+            } else if (inStock.equalsIgnoreCase("N")) {
+                isInStock = false;
+            } else {
+                System.out.println("Not a valid entry.  In stock status is unknown; therefore, it will be listed as no.");
+                isInStock = false;
+            }
+
+            Book book = new Book(author, description, price, title, isInStock);
+            book.getDisplayText();          // Print out a book's information
+            Books.add(book);                // Add the book to the repository
         }
-        else if ( inStock.equalsIgnoreCase("N")) {
-            book.isInStock = false;
+
+        System.out.println("Do you want to display all the books?");
+        displayAll = key.nextLine();
+        if (displayAll.equalsIgnoreCase("Y")) {
+            for (Book bk : Books) {
+                bk.getDisplayText();
+            }
         }
         else {
-            System.out.println("Not a valid entry.  In stock status is unknown; therefore, it will be listed as no.");
-            book.isInStock = false;
+            System.out.println("Thank you for entering the books into the repository.");
         }
-
-        // Print out a book's information
-        book.getDisplayText();
     }
 
+    // used to populate a book constructor
     private String author;
     private String description;
     private double price;
     private String title;
     private boolean isInStock;
 
+
     // Default Constructors
-    Book() {
+    private Book() {
         author = "NO AUTHOR";
         description = "NO DESCPTION";
         price = 0.0;
         title = "NO TITLE";
         isInStock = false;
-     }
+    }
 
     // Overloaded Constructor
-     Book(String author, String description, double price, String title, boolean isInStock ) {
+    private Book(String author, String description, double price, String title, boolean isInStock ) {
         this.author = author;
         this.description = description;
         this.price = price;
         this.title = title;
         this.isInStock = isInStock;
-     }
+    }
 
     // Method: getDisplayText
+    // This method is used to display the information for one book
     public void getDisplayText() {
         NumberFormat formatter = NumberFormat.getCurrencyInstance();
 
@@ -76,7 +121,9 @@ public class Book {
         else {
             System.out.println("Currently the book is not in stock.");
         }
+        System.out.println();
     }
+
     /**
      * Getter methods for the book variables
      * @return
@@ -104,8 +151,8 @@ public class Book {
 
     /**
      * Setter methods for the book variables
-     * @param title
      */
+
     public void setTitle(String title) {
         this.title = title;
     }
